@@ -23,8 +23,10 @@ pipeline {
         stage('Build Gradle') {
             steps {
                 echo 'Build Gradle'
-                sh 'chmod +x gradlew'
-                sh './gradlew clean build'
+                dir ('/backend/tada') {
+                    sh 'chmod +x gradlew'
+                    sh './gradlew clean build'
+                }
             }
             post {
                 failure {
