@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    enviroment {
+    environment {
         imagename = "tada-back"
     }
     stages {
