@@ -9,7 +9,7 @@ pipeline {
                 echo "Clonning Repository"
                 git url: 'https://lab.ssafy.com/s08-final/S08P31A503.git',
                 branch: 'dev-back',
-                 credentialsId: '6992ab8a-fd92-4047-a0e6-30008273c053'
+                 credentialsId: '95086913-a1b2-4c08-8a34-382f19454773'
             }
             post {
                 success {
