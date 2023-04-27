@@ -24,7 +24,6 @@ pipeline {
             steps {
                 echo 'Build Gradle'
                 dir ('/backend/tada') {
-                    sh 'chmod +x gradlew'
                     sh './gradlew clean --debug build'
                 }
             }
