@@ -16,7 +16,7 @@ pipeline {
                     echo 'Successfully Cloned Repository'
                 }
                 failure {
-                    error 'This pipeline stops here...'
+                    error '[Error] Clone Repository'
                 }
             }
         }
@@ -30,7 +30,7 @@ pipeline {
             }
             post {
                 failure {
-                    error 'This pipeline stops here...'
+                    error '[Error] Build Gradle'
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
             }
             post {
                 failure {
-                    error 'This pipeline stops here...'
+                    error '[Error] Build Docker'
                 }
             }
         } 
