@@ -1,29 +1,50 @@
 pipeline {
     agent any
+    enviroment {
+        imagename = "tada-back"
+    }
     stages {
-        stage('Compile') {
+        stage('Clone Repository') {
             steps {
-                echo "Compiled successfully!";
+                echo "Clonning Repository"
+                git url: 'https://lab.ssafy.com/s08-final/S08P31A503.git',
+                branch: 'dev-back',
+                 credentialsId: 'tada'
+            }
+            post {
+                success {
+                    echo 'Successfully Cloned Repository'
+                }
+                failure {
+                    error 'This pipeline stops here...'
+                }
             }
         }
-
-        stage('JUnit') {
+        stage('Build Gradle') {
             steps {
-                echo "JUnit passed successfully!";
+                echo 'Build Gradle'
+                sh 'chmod +x gradlew'
+                sh './gradlew clean build'
+            }
+            post {
+                failure {
+                    error 'This pipeline stops here...'
+                }
             }
         }
-
-        stage('Code Analysis') {
+        stage('Build Docker') {
             steps {
-                echo "Code Analysis completed successfully!";
+                echo 'Build Docker'
+                script {
+                    dockerImage = docker.build imagename
+                }
             }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo "Deployed successfully!";
+            post {
+                failure {
+                    error 'This pipeline stops here...'
+                }
             }
-        }
+        } 
     }
 }
 
