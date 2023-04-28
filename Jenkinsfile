@@ -37,9 +37,11 @@ pipeline {
         }
         stage('Build Docker') {
             steps {
-                echo 'Build Docker'
-                script {
-                    dockerImage = docker.build imagename
+                dir ('backend/tada') {
+                    echo 'Build Docker'
+                    script {
+                        dockerImage = docker.build imagename
+                    }
                 }
             }
             post {
