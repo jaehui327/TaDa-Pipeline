@@ -1,6 +1,8 @@
 pipeline {
     agent any
     environment {
+        repository = "jaehui327/tada-back"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         imagename = "tada-back"
     }
     stages {
@@ -40,7 +42,7 @@ pipeline {
                 dir ('backend/tada') {
                     echo 'Build Docker'
                     script {
-                        dockerImage = docker.build imagename
+                        dockerImage = docker.build repository + ":$BUILD_NUMBER" 
                     }
                 }
             }
@@ -49,7 +51,16 @@ pipeline {
                     error '[Error] Build Docker'
                 }
             }
-        } 
+        }
+        stage('Upload Dockerhub') {
+            steps {
+                dir ('backend/tada') {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                    sh 'docker push $repository:$BUILD_NUMBER'
+                    sh 'docker rmi $repository:$BUILD_NUMBER'
+                }
+            }
+        }
     }
 }
 
