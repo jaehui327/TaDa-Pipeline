@@ -42,7 +42,7 @@ pipeline {
                 dir ('backend/tada') {
                     echo 'Build Docker'
                     script {
-                        dockerImage = docker.build repository + ":$BUILD_NUMBER" 
+                        dockerImage = docker.build repository + ":latest" 
                     }
                 }
             }
@@ -56,8 +56,8 @@ pipeline {
             steps {
                 dir ('backend/tada') {
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                    sh 'docker push $repository:$BUILD_NUMBER'
-                    sh 'docker rmi $repository:$BUILD_NUMBER'
+                    sh 'docker push $repository:latest'
+                    sh 'docker rmi $repository:latest'
                 }
             }
         }
