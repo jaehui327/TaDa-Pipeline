@@ -59,6 +59,19 @@ pipeline {
                     sh 'docker push $repository:latest'
                     sh 'docker rmi $repository:latest'
                 }
+            } post {
+                failure {
+                    error '[Error] Upload Dockerhub'
+                }
+            }
+        }
+        stage('Connect SSH') {
+            steps {
+                build 'tada-back-2'
+            } post {
+                failure {
+                    error '[Error] Connect SSH'
+                }
             }
         }
     }
