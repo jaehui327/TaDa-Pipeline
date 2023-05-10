@@ -1,11 +1,24 @@
 pipeline {
     agent any
+    post {
+    failure {
+        updateGitlabCommitStatus name: 'build', state: 'failed'
+        }
+    success {
+        updateGitlabCommitStatus name: 'build', state: 'success'
+        }
+    }
     environment {
         repository = "jaehui327/tada-back"
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
         imagename = "tada-back"
     }
     stages {
+        stage('Running') {
+            steps {
+                updateGitlabCommitStatus name: 'build', state: 'running'
+            }
+        }
         stage('Clone Repository') {
             steps {
                 echo "Clonning Repository"
@@ -24,6 +37,8 @@ pipeline {
         }
         stage('Build Gradle') {
             steps {
+                sh 'cp /var/lib/jenkins/workspace/backend/application-aws.yml backend/tada/src/main/resources/'
+                sh 'cp /var/lib/jenkins/workspace/backend/application-db.yml backend/tada/src/main/resources/'
                 dir ('backend/tada') {
                     echo 'Build Gradle'
                     sh 'pwd'
@@ -68,4 +83,3 @@ pipeline {
         }
     }
 }
-
